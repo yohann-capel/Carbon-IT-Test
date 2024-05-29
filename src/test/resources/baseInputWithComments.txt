@@ -1,0 +1,10 @@
+C - 3 - 4
+#Salut
+M - 1 - 0
+#à ignorer
+M - 2 - 1
+T - 0 - 3 - 2
+# {A comme Aventurier} - {Nom de l’aventurier} - {Axe horizontal} - {Axe vertical} - {Orientation} - {Séquence de mouvement}
+T - 1 - 3 - 3
+A - Lara - 1 - 1 - S - AADADAGGA
+#Test
