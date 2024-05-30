@@ -9,6 +9,7 @@ public class Adventurer extends Case {
     private final String name;
     private final String moveSet;
     private final Orientation orientation;
+    private int numberOfTreasures = 0;
 
     public Adventurer(String name, int x, int y, Orientation orientation, String moveSet) {
         super(Type.AVENTURIER, x, y);
@@ -30,12 +31,25 @@ public class Adventurer extends Case {
         if (!(o instanceof Adventurer)) return false;
         if (!super.equals(o)) return false;
         Adventurer that = (Adventurer) o;
-        return Objects.equals(name, that.name) && Objects.equals(moveSet, that.moveSet) && orientation == that.orientation;
+        return numberOfTreasures == that.numberOfTreasures && Objects.equals(name, that.name) && orientation == that.orientation;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), name, moveSet, orientation);
+        return Objects.hash(super.hashCode(), name, numberOfTreasures, x, y, orientation);
+    }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "%s - %s - %s - %s - %s - %s",
+                this.type.getType(),
+                this.name,
+                this.x,
+                this.y,
+                this.orientation.getOrientation(),
+                this.numberOfTreasures
+        );
     }
 
     public String getName() {

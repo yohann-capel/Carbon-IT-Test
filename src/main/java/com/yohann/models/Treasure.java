@@ -18,8 +18,11 @@ public class Treasure extends Case {
     }
 
     public void takeOne() {
-        //TODO: check le 0 trésors
         this.quantity -= 1;
+    }
+
+    public int getQuantity() {
+        return this.quantity;
     }
 
     @Override
@@ -36,7 +39,8 @@ public class Treasure extends Case {
         return Objects.hash(super.hashCode(), quantity);
     }
 
-    public int getQuantity() {
-        return quantity;
+    @Override
+    public String toString() {
+        return String.format("%s - %s", super.toString(), this.quantity);
     }
 }

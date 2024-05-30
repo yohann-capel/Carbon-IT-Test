@@ -34,23 +34,20 @@ public class Case {
         return Objects.hash(type, x, y);
     }
 
-    public Type getType() {
-        return type;
+    @Override
+    public String toString() {
+        return String.format("%s - %s - %s", this.type.getType(), this.x, this.y);
     }
 
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public void setY(int y) {
-        this.y = y;
+    public Type getType() {
+        return this.type;
     }
 }

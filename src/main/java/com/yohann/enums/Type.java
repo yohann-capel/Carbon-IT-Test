@@ -9,7 +9,8 @@ public enum Type {
 
     private String type;
 
-    Type(String c) {
+    Type(String type) {
+        this.type = type;
     }
 
     public String getType() {

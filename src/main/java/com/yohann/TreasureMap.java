@@ -5,21 +5,25 @@ import com.yohann.models.Case;
 import com.yohann.models.Treasure;
 import com.yohann.enums.Type;
 import com.yohann.exceptions.MultipleTreasureMapSizeException;
+import com.yohann.models.TMap;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.*;
 import java.nio.file.Path;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class TreasureMap {
+    private Logger logger = Logger.getLogger("TreasureMapLogic");
     private File file = null;
 
     public TreasureMap(Path filePath) {
         this.file = new File(filePath.toString());
     }
 
-    protected List<String> readFileContent() throws FileNotFoundException {
+    public List<String> readFileContent() throws FileNotFoundException {
         Scanner sc = new Scanner(file);
         List<String> fileContent = new ArrayList<>();
         while(sc.hasNextLine()) {
@@ -28,15 +32,15 @@ public class TreasureMap {
             fileContent.add(line);
         }
         sc.close();
-
+        logger.info("readFileContent end");
         return fileContent;
     }
 
-    public List<List<Case>> generateMap() throws FileNotFoundException, MultipleTreasureMapSizeException {
+    public TMap generateMap() throws FileNotFoundException, MultipleTreasureMapSizeException {
         return this.generateMap(this.readFileContent());
     }
 
-    public List<List<Case>> generateMap(List<String> fileContent) throws MultipleTreasureMapSizeException {
+    public TMap generateMap(List<String> fileContent) throws MultipleTreasureMapSizeException {
         if(fileContent.stream().filter(el -> el.startsWith("C")).count() != 1) throw new MultipleTreasureMapSizeException();
 
         List<String[]> fileData = fileContent
@@ -45,34 +49,18 @@ public class TreasureMap {
                 .collect(Collectors.toList());
 
         String[] mapInfo = fileData.stream().filter(el -> el[0].equals("C")).findFirst().get();
-        List<List<Case>> result = createBaseTreasureMap(mapInfo);
+        TMap result = new TMap(mapInfo[1], mapInfo[2]);
 
         fileData
                 .stream()
-                .map(this::mapData)
+                .map(this::dataMapping)
                 .filter(Objects::nonNull)
-                .forEach(caseEl -> result.get(caseEl.getX()).set(caseEl.getY(), caseEl));
-
-
-        return result;
-    }
-
-    private List<List<Case>> createBaseTreasureMap(String[] mapInfo) {
-        int length = Integer.parseInt(mapInfo[1]);
-        int height = Integer.parseInt(mapInfo[2]);
-        List<List<Case>> result = new ArrayList<>();
-
-        for(int x = 0; x < length; x++) {
-            result.add(new ArrayList<>());
-            for(int y = 0; y < height; y++) {
-                result.get(x).add(new Case(Type.PLAINE, x, y));
-            }
-        }
+                .forEach(result::setAtCoordinates);
 
         return result;
     }
 
-    protected Case mapData(String[] data) {
+    public Case dataMapping(String[] data) {
         if(data[0].equals("C"))
             return null;
         if(data[0].equals("A"))
@@ -81,5 +69,32 @@ public class TreasureMap {
             return new Treasure(data[1], data[2], data[3]);
 
         return new Case(Type.retrieveByLetter(data[0]), data[1], data[2]);
+    }
+
+    public void generateResultFile(TMap map) throws IOException {
+        FileWriter fileWriter = new FileWriter(String.format("src/main/results/result_%s", new SimpleDateFormat("yyyyMMddHHmm'.txt'").format(new Date())));
+        PrintWriter printWriter = new PrintWriter(fileWriter);
+        List<Case> mapContent = map
+                .getMap()
+                .stream()
+                .flatMap(Collection::stream)
+                .filter(caseEl -> !caseEl.getType().equals(Type.PLAINE))
+                .collect(Collectors.toList());
+
+        printWriter.printf("C - %s - %s", map.getLength(), map.getHeight());
+        printWriter.println();
+
+        for (Type type : Arrays.asList(Type.MONTAGNE, Type.TRESOR, Type.AVENTURIER)) {
+            mapContent
+                    .stream()
+                    .filter(el -> el.getType().equals(type))
+                    .forEach(el -> {
+                        printWriter.printf(el.toString());
+                        printWriter.println();
+                    });
+        }
+
+        fileWriter.close();
+        printWriter.close();
     }
 }

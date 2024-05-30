@@ -2,6 +2,7 @@ package com.yohann;
 
 import com.yohann.models.Adventurer;
 import com.yohann.models.Case;
+import com.yohann.models.TMap;
 import com.yohann.models.Treasure;
 import com.yohann.enums.Orientation;
 import com.yohann.enums.Type;
@@ -10,8 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,13 +93,13 @@ class TreasureMapTest {
     @Test
     void shouldMapAdventurerStringDataToAdventurerClass() {
         TreasureMap tm = new TreasureMap(Paths.get("src"));
-        assertEquals(new Adventurer("Yohann", "0", "0", "S", "ADDADDADD"), tm.mapData(new String[] {"A", "Yohann", "0", "0", "S", "ADDADDADD"}));
+        assertEquals(new Adventurer("Yohann", "0", "0", "S", "ADDADDADD"), tm.dataMapping(new String[] {"A", "Yohann", "0", "0", "S", "ADDADDADD"}));
     }
 
     @Test
     void shouldMapAdventurerStringDataToTreasureClass() {
         TreasureMap tm = new TreasureMap(Paths.get("src"));
-        assertEquals(new Treasure("0", "1", "5"), tm.mapData(new String[] {"T", "0", "1", "5"}));
+        assertEquals(new Treasure("0", "1", "5"), tm.dataMapping(new String[] {"T", "0", "1", "5"}));
     }
 
     @Test
@@ -120,7 +125,7 @@ class TreasureMapTest {
                 new Case(Type.PLAINE, 2, 3)
             )
         );
-        assertArrayEquals(expected.toArray(), tm.generateMap().toArray());
+        assertArrayEquals(expected.toArray(), tm.generateMap().getMap().toArray());
     }
 
     @Test
@@ -136,7 +141,7 @@ class TreasureMapTest {
                 new Case(Type.PLAINE, 1, 1)
             )
         );
-        assertArrayEquals(expected.toArray(), tm.generateMap().toArray());
+        assertArrayEquals(expected.toArray(), tm.generateMap().getMap().toArray());
     }
 
     @Test
@@ -163,7 +168,7 @@ class TreasureMapTest {
             )
         );
 
-        assertArrayEquals(expected.toArray(), tm.generateMap().toArray());
+        assertArrayEquals(expected.toArray(), tm.generateMap().getMap().toArray());
     }
 
     @Test
@@ -190,6 +195,30 @@ class TreasureMapTest {
                 )
         );
 
-        assertFalse(Arrays.equals(expected.toArray(), tm.generateMap().toArray()));
+        assertFalse(Arrays.equals(expected.toArray(), tm.generateMap().getMap().toArray()));
+    }
+
+    @Test
+    void shouldToStringAdventureInTheRightFormat() {
+        assertEquals("A - Tuna - 0 - 0 - S - 0", (new Adventurer("Tuna", 0, 0, Orientation.SUD, "A")).toString());
+    }
+
+    @Test
+    void shouldToStringTreasureInTheRightFormat() {
+        assertEquals("T - 1 - 2 - 3", (new Treasure(1, 2, 3)).toString());
+    }
+
+    @Test
+    void shouldSaveTheResultAndRespectFormat() throws IOException, MultipleTreasureMapSizeException {
+        String resultFileName = String.format("result_%s", new SimpleDateFormat("yyyyMMddHHmm'.txt'").format(new Date()));
+
+        TreasureMap tm = new TreasureMap(Paths.get(resourcesDirectory.toString(), "baseInputNoComments.txt"));
+        TMap expected = tm.generateMap();
+        tm.generateResultFile(expected);
+
+        tm = new TreasureMap(Paths.get( "src", "main", "results", resultFileName));
+        TMap actual = tm.generateMap();
+
+        assertArrayEquals(expected.getMap().toArray(), actual.getMap().toArray());
     }
 }

@@ -9,7 +9,12 @@ public enum Orientation {
 
     private String orientation;
 
-    Orientation(String o) {
+    Orientation(String orientation) {
+        this.orientation = orientation;
+    }
+
+    public String getOrientation() {
+        return this.orientation;
     }
 
     public static Orientation retrieveByLetter(String letter) {
