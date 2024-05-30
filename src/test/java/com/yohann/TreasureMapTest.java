@@ -221,4 +221,30 @@ class TreasureMapTest {
 
         assertArrayEquals(expected.getMap().toArray(), actual.getMap().toArray());
     }
+
+    @Test
+    void shouldPickOneTreasure() {
+        Adventurer adventurer = new Adventurer("Tuna", 0, 0, Orientation.SUD, "A");
+        Treasure treasure = new Treasure(0, 0, 1);
+        assertTrue(adventurer.pickUp(treasure));
+    }
+
+    @Test
+    void cantPickTreasureBecauseTooFar() {
+        Adventurer adventurer = new Adventurer("Tuna", 0, 0, Orientation.SUD, "A");
+        Treasure treasure = new Treasure(1, 0, 1);
+        assertFalse(adventurer.pickUp(treasure));
+    }
+
+    @Test
+    void cantPickTreasureBecauseThereIsNoMoreLeft() {
+        Adventurer adventurer = new Adventurer("Tuna", 0, 0, Orientation.SUD, "A");
+        Treasure treasure = new Treasure(0, 0, 0);
+        assertFalse(adventurer.pickUp(treasure));
+    }
+
+    @Test
+    void adventurerShouldMoveToTheLeftBecauseOfOrientation() {
+
+    }
 }

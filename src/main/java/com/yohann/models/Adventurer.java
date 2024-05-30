@@ -1,11 +1,14 @@
 package com.yohann.models;
 
+import com.yohann.TreasureMap;
 import com.yohann.enums.Orientation;
 import com.yohann.enums.Type;
 
 import java.util.Objects;
+import java.util.logging.Logger;
 
 public class Adventurer extends Case {
+    private final Logger logger = Logger.getLogger("Adventurer");
     private final String name;
     private final String moveSet;
     private final Orientation orientation;
@@ -62,5 +65,22 @@ public class Adventurer extends Case {
 
     public String getMoveSet() {
         return moveSet;
+    }
+
+    public boolean pickUp(Treasure treasure) {
+        if (treasure.getX() != this.x || treasure.getY() != this.y) {
+            logger.info("Your arm is not that long !");
+            return false;
+        }
+
+        if(!treasure.hasTreasureLeft()) {
+            logger.info("There is nothing left !");
+            return false;
+        }
+
+        treasure.takeOne();
+        this.numberOfTreasures++;
+        logger.info("Treasure collected !");
+        return true;
     }
 }

@@ -21,8 +21,8 @@ public class Treasure extends Case {
         this.quantity -= 1;
     }
 
-    public int getQuantity() {
-        return this.quantity;
+    public boolean hasTreasureLeft() {
+        return this.quantity > 0;
     }
 
     @Override

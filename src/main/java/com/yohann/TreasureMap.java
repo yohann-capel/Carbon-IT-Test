@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class TreasureMap {
-    private Logger logger = Logger.getLogger("TreasureMapLogic");
+    private final Logger logger = Logger.getLogger("TreasureMapLogic");
     private File file = null;
 
     public TreasureMap(Path filePath) {
