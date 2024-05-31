@@ -13,8 +13,7 @@ public class Treasure extends Case {
     }
 
     public Treasure(String x, String y, String quantity) {
-        super(Type.TRESOR, x, y);
-        this.quantity = Integer.parseInt(quantity);
+        this(Integer.parseInt(x), Integer.parseInt(y), Integer.parseInt(quantity));
     }
 
     public void takeOne() {

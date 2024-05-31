@@ -13,7 +13,7 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Main start");
 
-        TreasureMap treasureMapLogic = new TreasureMap(Paths.get("src", "test", "resources", "baseInputNoComments.txt"));
+        Engine treasureMapLogic = new Engine(Paths.get("src", "test", "resources", "baseInputNoComments.txt"));
         try {
             treasureMapLogic.generateMap();
         } catch (FileNotFoundException | MultipleTreasureMapSizeException e) {

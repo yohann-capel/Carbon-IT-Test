@@ -16,9 +16,7 @@ public class Case {
     }
 
     public Case(Type type, String x, String y) {
-        this.type = type;
-        this.x = Integer.parseInt(x);
-        this.y = Integer.parseInt(y);
+        this(type, Integer.parseInt(x), Integer.parseInt(y));
     }
 
     @Override

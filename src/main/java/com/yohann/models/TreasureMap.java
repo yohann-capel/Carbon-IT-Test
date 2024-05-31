@@ -5,14 +5,15 @@ import com.yohann.enums.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TMap {
+public class TreasureMap {
     List<List<Case>> map;
 
-    public TMap(String length, String height) {
+    public TreasureMap(String length, String height) {
         this(Integer.parseInt(length), Integer.parseInt(height));
     }
 
-    public TMap(int length, int height) {
+    public TreasureMap(int length, int height) throws IllegalArgumentException {
+        if(length == 0 && height == 0) throw new IllegalArgumentException("Map can't be of size 0");
         this.map = new ArrayList<>();
 
         for(int x = 0; x < length; x++) {
@@ -23,11 +24,11 @@ public class TMap {
         }
     }
 
-    public Case getAtCoordinates(int x, int y) {
+    public Case get(int x, int y) {
         return this.map.get(x).get(y);
     }
 
-    public void setAtCoordinates(Case object) {
+    public void addOnMap(Case object) {
         this.map.get(object.getX()).set(object.getY(), object);
     }
 

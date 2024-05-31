@@ -1,6 +1,5 @@
 package com.yohann.models;
 
-import com.yohann.TreasureMap;
 import com.yohann.enums.Orientation;
 import com.yohann.enums.Type;
 
@@ -10,22 +9,56 @@ import java.util.logging.Logger;
 public class Adventurer extends Case {
     private final Logger logger = Logger.getLogger("Adventurer");
     private final String name;
-    private final String moveSet;
-    private final Orientation orientation;
+    private final String moveset;
+    private Orientation orientation;
     private int numberOfTreasures = 0;
+    private char currentMovement;
 
-    public Adventurer(String name, int x, int y, Orientation orientation, String moveSet) {
+    public Adventurer(String name, int x, int y, Orientation orientation, String moveset) {
         super(Type.AVENTURIER, x, y);
         this.name = name;
-        this.moveSet = moveSet;
+        this.moveset = moveset;
         this.orientation = orientation;
+        this.currentMovement = moveset.charAt(0);
     }
 
-    public Adventurer(String name, String x, String y, String orientation, String moveSet) {
-        super(Type.AVENTURIER, x, y);
-        this.name = name;
-        this.moveSet = moveSet;
-        this.orientation = Orientation.retrieveByLetter(orientation);
+    public Adventurer(String name, String x, String y, String orientation, String moveset) {
+        this(name, Integer.parseInt(x), Integer.parseInt(y), Orientation.retrieveByLetter(orientation), moveset);
+    }
+
+    public boolean pickUp(Treasure treasure) {
+        logger.info("Picking up treasure !");
+
+        if (treasure.getX() != this.x || treasure.getY() != this.y) {
+            logger.info("Your arm is not that long !");
+            return false;
+        }
+
+        if(!treasure.hasTreasureLeft()) {
+            logger.info("There is nothing left !");
+            return false;
+        }
+
+        treasure.takeOne();
+        this.numberOfTreasures++;
+        logger.info("Treasure collected !");
+        return true;
+    }
+
+    public void turnRight() {
+        logger.info("Turning right");
+        int newOrdinal = this.orientation.ordinal() + 1 == 4
+                ? 0
+                : this.orientation.ordinal() + 1;
+        this.orientation = Orientation.values()[newOrdinal];
+    }
+
+    public void turnLeft() {
+        logger.info("Turning left");
+        int newOrdinal = this.orientation.ordinal() == 0
+                ? 3
+                : this.orientation.ordinal() - 1;
+        this.orientation = Orientation.values()[newOrdinal];
     }
 
     @Override
@@ -63,24 +96,7 @@ public class Adventurer extends Case {
         return orientation;
     }
 
-    public String getMoveSet() {
-        return moveSet;
-    }
-
-    public boolean pickUp(Treasure treasure) {
-        if (treasure.getX() != this.x || treasure.getY() != this.y) {
-            logger.info("Your arm is not that long !");
-            return false;
-        }
-
-        if(!treasure.hasTreasureLeft()) {
-            logger.info("There is nothing left !");
-            return false;
-        }
-
-        treasure.takeOne();
-        this.numberOfTreasures++;
-        logger.info("Treasure collected !");
-        return true;
+    public String getMoveset() {
+        return moveset;
     }
 }

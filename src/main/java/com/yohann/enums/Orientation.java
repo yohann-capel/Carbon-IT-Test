@@ -3,11 +3,11 @@ package com.yohann.enums;
 // Valeurs en français pour matcher l'exercice
 public enum Orientation {
     NORD("N"),
-    SUD("S"),
     EST("E"),
+    SUD("S"),
     OUEST("O");
 
-    private String orientation;
+    private final String orientation;
 
     Orientation(String orientation) {
         this.orientation = orientation;
