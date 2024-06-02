@@ -1,8 +1,10 @@
 package com.yohann;
 
 import com.yohann.exceptions.MultipleTreasureMapSizeException;
+import com.yohann.models.TreasureMap;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.nio.file.Paths;
 import java.util.logging.Logger;
 
@@ -13,11 +15,17 @@ public class Main {
     public static void main(String[] args) {
         logger.info("Main start");
 
-        Engine treasureMapLogic = new Engine(Paths.get("src", "test", "resources", "baseInputNoComments.txt"));
+        Engine engine = new Engine(Paths.get("src", "main", "resources", "data.txt"));
         try {
-            treasureMapLogic.generateMap();
-        } catch (FileNotFoundException | MultipleTreasureMapSizeException e) {
-            throw new RuntimeException(e);
+            TreasureMap map = engine.generateMap();
+            engine.run(map);
+            engine.save(map, Paths.get("src", "main", "results"));
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException("Input data file not found");
+        } catch (MultipleTreasureMapSizeException e) {
+            throw new RuntimeException("Error in file naming, containing 2 Map size");
+        } catch (IOException e) {
+            throw new RuntimeException("Can't save the data");
         }
     }
 }

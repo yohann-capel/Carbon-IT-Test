@@ -9,7 +9,7 @@ public class Treasure extends Case {
 
     public Treasure(int x, int y, int quantity) {
         super(Type.TRESOR, x, y);
-        this.quantity = quantity;
+        this.quantity = quantity == 0 ? 1 : quantity;
     }
 
     public Treasure(String x, String y, String quantity) {
