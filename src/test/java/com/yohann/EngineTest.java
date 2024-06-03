@@ -234,7 +234,7 @@ class EngineTest {
         Engine engine = new Engine(Paths.get(resourcesDirectory.toString(), "baseInputNoComments.txt"));
 
         List<String> expectedFileContent = engine.readFileContent();
-        engine.save(engine.generateMap(expectedFileContent), Paths.get("src", "test" , "results"));
+        engine.save(engine.generateMap(expectedFileContent), Paths.get("src", "test" , "results", resultFileName));
 
         engine = new Engine(Paths.get( "src", "test", "results", resultFileName));
         List<String> fileContent = engine.readFileContent();
@@ -340,7 +340,7 @@ class EngineTest {
         Engine engine = new Engine(Paths.get(resourcesDirectory.toString(), "baseInputWithComments.txt"));
         TreasureMap map = engine.generateMap();
         engine.run(map);
-        engine.save(map, saveFolder.toPath());
+        engine.save(map, Paths.get(saveFolder.toString(), resultFileName));
 
         engine = new Engine(Paths.get( "src", "test", "results", resultFileName));
         List<String> fileContent = engine.readFileContent();

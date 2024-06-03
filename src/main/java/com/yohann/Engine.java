@@ -10,6 +10,7 @@ import com.yohann.models.TreasureMap;
 
 import java.awt.*;
 import java.io.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
@@ -112,20 +113,12 @@ public class Engine {
         return new Case(Type.retrieveByLetter(data[0]), data[1], data[2]);
     }
 
-    private Path getResultFilePath(Path folder) {
-        logger.info(String.format("Folder's path = %s", folder.toString()));
+    public void save(TreasureMap map, Path saveFile) throws IOException {
+        File folders = (new File(saveFile.toString())).getParentFile();
+        boolean created = folders.mkdirs();
+        logger.info(created ? "Subfolders created" : "No new folder created");
 
-        boolean created = new File(folder.toString()).mkdirs();
-        logger.info(created ? "Folder created" : "Folder already exists");
-
-        Path fullPath = Paths.get(String.format("%s/result_%s", folder.toString(), new SimpleDateFormat("yyyyMMddHHmm'.txt'").format(new Date())));
-        logger.info(String.format("File full path : %s", fullPath));
-
-        return fullPath;
-    }
-
-    public void save(TreasureMap map, Path folder) throws IOException {
-        FileWriter fileWriter = new FileWriter(getResultFilePath(folder).toString());
+        FileWriter fileWriter = new FileWriter(saveFile.toString());
         PrintWriter printWriter = new PrintWriter(fileWriter);
         List<Case> mapContent = map
                 .getMap()
