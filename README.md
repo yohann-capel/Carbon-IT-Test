@@ -18,7 +18,7 @@ Exercice pour l'entretient technique chez Carbon-IT
 - Choisir le fichier de sortie (2ème ligne)
 - Lancer le programme et aller vérifier le fichier à l'url de sortie choisie
 
-![Image d'exemple](https://github.com/yohann-capel/Carbon-IT/blob/master/src/main/resources/capture.png?raw=true)
+![Image d'exemple](https://github.com/yohann-capel/Carbon-IT-Test/blob/master/src/main/resources/capture.png?raw=true)
 
 ## Organisation
 - Code dans src/main/java/

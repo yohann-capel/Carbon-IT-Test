@@ -85,7 +85,7 @@ public class MainWindow extends JFrame {
     }
 
     private JButton inputFileBrowseButton() {
-        JButton browseButton = new JButton("Input file browse");
+        JButton browseButton = new JButton("Parcourir input");
 
         browseButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
@@ -107,7 +107,7 @@ public class MainWindow extends JFrame {
     }
 
     private JButton saveFileBrowseButton() {
-        JButton browseButton = new JButton("Save file browse");
+        JButton browseButton = new JButton("Parcourir sauvegarde");
 
         browseButton.addActionListener(e -> {
             JFileChooser fileChooser = new JFileChooser();
